@@ -117,9 +117,6 @@
     autoplay?: boolean
     title?: string
     class?: string
-    // Feed cards cap the player at a modest height (Reddit-style); the
-    // single post detail page should let it grow much larger instead.
-    fullSize?: boolean
   }
 
   let {
@@ -130,7 +127,6 @@
     opened = $bindable(!settings.embeds.clickToView),
     autoplay = settings.embeds.clickToView,
     class: clazz = '',
-    fullSize = false,
   }: Props = $props()
 
   let data = $derived(typeData(type))
@@ -155,7 +151,7 @@
   Displays a video file or embedded video iframe.
 -->
 <div class="iframe-outer">
-  <div class={['iframe-container', fullSize && 'full-size', clazz]}>
+  <div class={['iframe-container', clazz]}>
   {#if opened}
     {#if type == 'video'}
       <video {autoplay} controls>
@@ -220,15 +216,10 @@
   .iframe-container {
     border-radius: var(--radius-2xl);
     aspect-ratio: 16 / 9;
-    max-height: 24rem;
     position: relative;
     width: 100%;
     overflow: hidden;
     border: 1px solid var(--color-slate-200);
-
-    &.full-size {
-      max-height: 70vh;
-    }
 
     @variant dark {
       border-color: var(--color-zinc-900);
