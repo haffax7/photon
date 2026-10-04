@@ -58,6 +58,10 @@
   }: Props = $props()
   let buttonHeight = $derived(view == 'compact' ? 'h-7.5' : 'h-8')
   let buttonSquare = $derived(view == 'compact' ? 'w-7.5 h-7.5' : 'w-8 h-8')
+  // Flat, borderless pill style for the post action row (matches the
+  // reddit-style reference: pale flat background, no gradient/shadow/border).
+  const flatAction =
+    'bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700'
 
   function share(global: boolean = true, url?: string) {
     const link =
@@ -124,8 +128,9 @@
   <Button
     size="custom"
     href="{postLink(post.post)}#comments"
-    class="text-inherit! h-full px-3 relative"
-    rounding="xl"
+    color="none"
+    class="text-inherit! h-full px-3 relative {flatAction}"
+    rounding="pill"
     target={settings.openLinksInNewTab ? '_blank' : ''}
     aria-label={$t('post.actions.comments')}
   >
@@ -151,8 +156,9 @@
       onclick={() => (debug = true)}
       title="Debug"
       size="custom"
-      rounding="xl"
-      class={buttonSquare}
+      color="none"
+      rounding="pill"
+      class={[buttonSquare, flatAction]}
       icon={BugAnt}
     ></Button>
   {/if}
@@ -163,9 +169,10 @@
           <Button
             {@attach attachment}
             size="custom"
-            rounding="xl"
+            color="none"
+            rounding="pill"
             loading={acting}
-            class={buttonSquare}
+            class={[buttonSquare, flatAction]}
           >
             <Icon src={ShieldCheck} size="18" mini />
           </Button>
@@ -183,8 +190,9 @@
         saving = false
       }}
       size="custom"
-      class={buttonSquare}
-      rounding="xl"
+      color="none"
+      class={[buttonSquare, flatAction]}
+      rounding="pill"
       loading={saving}
       disabled={saving}
       title={post.saved ? $t('post.actions.unsave') : $t('post.actions.save')}
@@ -196,9 +204,10 @@
     {#snippet target(attachment)}
       <Button
         {@attach post.post.local ? () => {} : attachment}
-        rounding="xl"
+        rounding="pill"
         size="custom"
-        class={buttonSquare}
+        color="none"
+        class={[buttonSquare, flatAction]}
         onclick={() => {
           if (post.post.local) share()
         }}
@@ -236,9 +245,10 @@
         <Button
           {@attach popover}
           title={$t('post.actions.more.label')}
-          rounding="xl"
+          rounding="pill"
           size="custom"
-          class={buttonSquare}
+          color="none"
+          class={[buttonSquare, flatAction]}
           icon={EllipsisHorizontal}
         ></Button>
       {/snippet}

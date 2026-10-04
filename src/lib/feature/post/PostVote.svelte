@@ -1,9 +1,9 @@
 <script lang="ts" module>
   export const voteColor = (vote: number) =>
     vote == 1
-      ? `btn-primary border-0! border border-transparent`
+      ? `bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300`
       : vote == -1
-        ? `bg-red-500 text-slate-50 dark:bg-red-400 dark:text-zinc-900`
+        ? `bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400`
         : ''
 
   export const shouldShowVoteColor = (
@@ -100,7 +100,7 @@
             vote,
             target == 'upvote' ? 'upvotes' : 'downvotes',
           )
-        : 'btn-secondary',
+        : 'bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700',
     ]}
     aria-pressed={vote == targetNum}
     aria-label={$t(
@@ -136,7 +136,7 @@
   )}
   <div
     class={[
-      'rounded-xl h-full font-medium flex relative overflow-hidden',
+      'rounded-full h-full font-medium flex relative overflow-hidden',
       voteRatio < 85 && settings.voteRatioBar && 'vote-ratio',
     ]}
     aria-label={$t('aria.vote.group')}
