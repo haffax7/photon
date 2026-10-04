@@ -124,6 +124,7 @@ export const aliases = new Map([
   ['fi-FI', 'fi'],
   ['et-EE', 'et'],
   ['he-IL', 'he'],
+  ['ko-KR', 'ko'],
 ])
 
 export const { t, locale, locales, loading, loadTranslations } = new i18n<
