@@ -2,7 +2,12 @@
   import type { Post } from '$lib/api/types'
   import { settings, type View } from '$lib/app/settings.svelte'
   import { PostIframe, PostImage, PostLink } from '..'
-  import { iframeType, type MediaType } from '../helpers'
+  import {
+    iframeType,
+    isYoutubeLink,
+    type MediaType,
+    youtubeThumbnailURL,
+  } from '../helpers'
   import PostEvent from './PostEvent.svelte'
   import PostPoll from './PostPoll.svelte'
 
@@ -34,8 +39,11 @@
 {#if type == 'image' && view == 'cozy'}
   <PostImage {post} {blur} {...rest} />
 {:else if (type == 'iframe' || type == 'video') && view == 'cozy' && post.url}
+  {@const youtubeId = isYoutubeLink(post.url)?.[1]}
   <PostIframe
-    thumbnail={post.thumbnail_url}
+    thumbnail={youtubeId
+      ? youtubeThumbnailURL(youtubeId)
+      : post.thumbnail_url}
     type={iframeType(post.url)}
     url={post.url}
     {opened}

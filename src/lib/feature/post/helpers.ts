@@ -79,6 +79,24 @@ export const isYoutubeLink = (url?: string): RegExpMatchArray | null => {
 const YOUTUBE_SEARCH_REGEX =
   /(?:https?:\/\/)?(?:www\.|m\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|shorts\/|live\/|v\/|watch\?v=|watch\?[^\s]*&v=))([\w-]{11})/
 
+// Highest-quality thumbnail first - maxresdefault.jpg is only generated for
+// videos uploaded in HD, and YouTube silently serves a tiny 120x90 grey
+// placeholder (still HTTP 200, no error) instead of a real 404 when it
+// doesn't exist. PostIframe's preview <img> detects that placeholder by its
+// exact size and steps down to the next size in this list on load.
+export const YOUTUBE_THUMBNAIL_QUALITIES = [
+  'maxresdefault',
+  'sddefault',
+  'hqdefault',
+] as const
+
+export function youtubeThumbnailURL(
+  id: string,
+  quality: (typeof YOUTUBE_THUMBNAIL_QUALITIES)[number] = 'maxresdefault',
+): string {
+  return `https://img.youtube.com/vi/${id}/${quality}.jpg`
+}
+
 // Self/text posts have no post.url, so Lemmy never generates a
 // thumbnail_url for them - even when their body is just a pasted YouTube
 // link. This finds that link in the body and builds the same thumbnail URL
@@ -86,7 +104,7 @@ const YOUTUBE_SEARCH_REGEX =
 export function findYoutubeThumbnailInBody(body?: string): string | null {
   if (!body) return null
   const match = body.match(YOUTUBE_SEARCH_REGEX)
-  return match?.[1] ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : null
+  return match?.[1] ? youtubeThumbnailURL(match[1]) : null
 }
 
 export function postLink(post: Post) {

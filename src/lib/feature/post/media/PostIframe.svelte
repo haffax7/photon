@@ -8,7 +8,27 @@
     PuzzlePiece,
     VideoCamera,
   } from 'svelte-hero-icons/dist'
-  import { type IframeType, optimizeImageURL } from '../helpers'
+  import {
+    type IframeType,
+    optimizeImageURL,
+    YOUTUBE_THUMBNAIL_QUALITIES,
+  } from '../helpers'
+
+  // maxresdefault.jpg/sddefault.jpg only exist for some videos; YouTube
+  // serves a 120x90 grey placeholder (HTTP 200, not an error) instead of
+  // failing, so onerror never fires - this detects that placeholder by its
+  // exact size and steps down to the next available quality.
+  function degradeYoutubeThumbnail(src: string): string | null {
+    const index = YOUTUBE_THUMBNAIL_QUALITIES.findIndex((quality) =>
+      src.includes(`/${quality}.jpg`),
+    )
+    const next = YOUTUBE_THUMBNAIL_QUALITIES[index + 1]
+    if (index == -1 || !next) return null
+    return src.replace(
+      `/${YOUTUBE_THUMBNAIL_QUALITIES[index]}.jpg`,
+      `/${next}.jpg`,
+    )
+  }
 
   const youtubeDomain = (place: 'youtube' | 'invidious' | 'piped') => {
     switch (place) {
@@ -127,6 +147,19 @@
 
   let data = $derived(typeData(type))
   let embedUrl = $derived(urlToEmbed(url))
+
+  let thumbnailSrc = $state(thumbnail)
+  $effect(() => {
+    thumbnailSrc = thumbnail
+  })
+
+  function handleThumbnailLoad(e: Event) {
+    const img = e.currentTarget as HTMLImageElement
+    if (img.naturalWidth == 120 && img.naturalHeight == 90 && thumbnailSrc) {
+      const degraded = degradeYoutubeThumbnail(thumbnailSrc)
+      if (degraded) thumbnailSrc = degraded
+    }
+  }
 </script>
 
 <!--
@@ -155,9 +188,10 @@
           <Icon src={Play} size="32" mini />
         </div>
       </div>
-      {#if thumbnail}
+      {#if thumbnailSrc}
         <img
-          src={optimizeImageURL(thumbnail, 512)}
+          src={optimizeImageURL(thumbnailSrc, 512)}
+          onload={handleThumbnailLoad}
           class="absolute top-0 left-0 -z-10 w-full object-cover h-full"
           alt=""
         />

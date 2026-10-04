@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { isYoutubeLink } from '$lib/feature/post/helpers'
+  import { isYoutubeLink, youtubeThumbnailURL } from '$lib/feature/post/helpers'
   import PostIframe, {
     youtubeVideoID,
   } from '$lib/feature/post/media/PostIframe.svelte'
@@ -37,9 +37,7 @@
       type="youtube"
       url={href}
       {title}
-      thumbnail={youtubeId
-        ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
-        : undefined}
+      thumbnail={youtubeId ? youtubeThumbnailURL(youtubeId) : undefined}
     />
   </span>
 {:else}
