@@ -13,7 +13,10 @@
   const youtubeDomain = (place: 'youtube' | 'invidious' | 'piped') => {
     switch (place) {
       case 'youtube': {
-        return 'www.youtube-nocookie.com'
+        // youtube-nocookie.com restricts embedding more strictly than
+        // youtube.com for some content (live stream VODs in particular),
+        // surfacing as "Error 153" even with a correct origin param.
+        return 'www.youtube.com'
       }
       case 'invidious': {
         return settings.embeds.invidious || 'yewtu.be'
