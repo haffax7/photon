@@ -3,101 +3,34 @@
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
 
-import { build, files, version } from '$service-worker'
+// This used to also intercept every fetch to serve a custom offline-caching
+// strategy (precache + cache-first/network-first fallback). That turned out
+// to be a real liability: in Safari specifically, the intercepted fetch()
+// calls inside the 'fetch' handler would intermittently fail with a generic
+// "TypeError: Load failed", which SvelteKit's module loader then surfaced as
+// "Failed to fetch dynamically imported module" / "Importing a module
+// script failed" - a production-breaking bug for no feature anyone asked
+// for. Keeping only install/activate (to replace old service worker
+// versions cleanly) and dropping the fetch interception removes that whole
+// failure mode: the browser's own network stack handles every request
+// directly instead of going through this worker.
 
-const CACHE = `cache-${version}`
-const ASSETS = [...build, ...files]
-
-self.addEventListener('install', (event) => {
+self.addEventListener('install', () => {
   console.info('[i] Installing service worker')
-
-  async function addFilesToCache() {
-    const cache = await caches.open(CACHE)
-    // Precache assets individually instead of cache.addAll(), since addAll()
-    // rejects (and aborts the entire install) if even one asset fails to
-    // fetch. A single flaky request shouldn't leave the whole app stuck on
-    // an old, possibly broken, service worker version.
-    await Promise.all(
-      ASSETS.map((asset) =>
-        cache.add(asset).catch((err) => {
-          console.warn(`[sw] failed to precache ${asset}`, err)
-        }),
-      ),
-    )
-  }
-
-  event.waitUntil(addFilesToCache())
   // Activate this version immediately instead of waiting for all open tabs
-  // of the old version to close, which otherwise lets a stale service
-  // worker keep serving old, hash-mismatched JS chunks indefinitely.
+  // of the old version to close.
   self.skipWaiting()
 })
 
 self.addEventListener('activate', (event) => {
   console.info('[i] Activating service worker')
 
-  async function deleteOldCaches() {
+  async function cleanup() {
     for (const key of await caches.keys()) {
-      if (key !== CACHE) await caches.delete(key)
+      await caches.delete(key)
     }
     await self.clients.claim()
   }
 
-  event.waitUntil(deleteOldCaches())
-})
-
-self.addEventListener('fetch', (e) => {
-  const event = e as FetchEvent
-  if (event.request.method !== 'GET') return
-
-  async function respond() {
-    const url = new URL(event.request.url)
-    const cache = await caches.open(CACHE)
-
-    // Bypass completely for API calls
-    if (url.pathname.includes('/api/')) {
-      try {
-        return await fetch(event.request)
-      } catch {
-        return new Response(JSON.stringify({ error: 'Offline' }), {
-          status: 503,
-          headers: { 'Content-Type': 'application/json' },
-        })
-      }
-    }
-
-    if (ASSETS.includes(url.pathname)) {
-      const cachedResponse = await cache.match(event.request)
-      if (cachedResponse) return cachedResponse
-    }
-
-    try {
-      const response = await fetch(event.request)
-
-      if (!(response instanceof Response)) {
-        throw new Error('invalid response from fetch')
-      }
-
-      const isHtmlResponse = response.headers
-        .get('content-type')
-        ?.includes('text/html')
-      const isAsset =
-        url.pathname.endsWith('.js') || url.pathname.endsWith('.css')
-      const isLocal = url.origin === self.location.origin
-
-      if (response.status === 200 && isLocal && !isHtmlResponse && !isAsset) {
-        cache.put(event.request, response.clone())
-      }
-
-      return response
-    } catch (err) {
-      // Fallback to cache if network is unavailable
-      const cachedResponse = await cache.match(event.request)
-      if (cachedResponse) return cachedResponse
-
-      throw err
-    }
-  }
-
-  event.respondWith(respond())
+  event.waitUntil(cleanup())
 })
