@@ -12,6 +12,12 @@
 
   interface Props {
     pageHeader?: boolean
+    // Only for a plain short text title (e.g. "Frontpage") - hands the
+    // title up to the navbar instead of rendering it large here. Pages
+    // whose title is rich content (banners, avatars, etc. - e.g. the user
+    // profile header) must NOT set this, since that content isn't safe to
+    // shrink into the navbar's slot or hide from the page.
+    titleInNavbar?: boolean
     style?: string
     class?: string
     size?: keyof typeof sizes
@@ -21,6 +27,7 @@
 
   let {
     pageHeader = false,
+    titleInNavbar = false,
     style = '',
     class: clazz = '',
     size = 'lg',
@@ -31,11 +38,11 @@
   // The navbar shows this page's title next to the logo instead, so hand
   // the title snippet up there rather than rendering a large heading here.
   $effect(() => {
-    if (pageHeader && children) pageTitleState.title = children
+    if (titleInNavbar && children) pageTitleState.title = children
   })
 
   onDestroy(() => {
-    if (pageHeader && pageTitleState.title === children) {
+    if (titleInNavbar && pageTitleState.title === children) {
       pageTitleState.title = undefined
     }
   })
@@ -54,7 +61,7 @@
   {#if children}
     <h1
       class={[
-        pageHeader ? 'sr-only' : sizes[size],
+        titleInNavbar ? 'sr-only' : sizes[size],
         'flex gap-2 w-full tracking-tight font-medium',
         clazz,
       ]}
