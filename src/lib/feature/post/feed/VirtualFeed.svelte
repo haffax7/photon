@@ -282,9 +282,7 @@
       <div style="border-top-width: 0">
         <EndPlaceholder>
           {$t('routes.frontpage.endFeed', {
-            community_name:
-              params.community_name ??
-              'Lemmy. There are no more posts. You saw them all.',
+            community_name: params.community_name,
           })}
           {#snippet action()}
             <Button color="tertiary" icon={ChevronDoubleUp}>
