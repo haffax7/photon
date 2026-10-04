@@ -16,8 +16,12 @@
   } from 'svelte-hero-icons/dist'
   import {
     bestImageURL,
+    degradeYoutubeThumbnail,
     findYoutubeThumbnailInBody,
+    isYoutubeLink,
+    optimizeImageURL,
     postLink,
+    youtubeThumbnailURL,
     type MediaType,
   } from '../helpers'
 
@@ -46,6 +50,25 @@
   let bodyThumbnail = $derived(
     !post.thumbnail_url ? findYoutubeThumbnailInBody(post.body) : null,
   )
+
+  // Lemmy's own thumbnail_url for a YouTube link post is often a low-res
+  // upscale; prefer fetching YouTube's own highest-quality thumbnail
+  // directly, same as PostIframe/PostMedia do for cozy view.
+  let youtubeId = $derived(
+    type == 'iframe' && post.url ? isYoutubeLink(post.url)?.[1] : undefined,
+  )
+  let youtubeThumb = $state<string | null>(null)
+  $effect(() => {
+    youtubeThumb = youtubeId ? youtubeThumbnailURL(youtubeId) : null
+  })
+
+  function handleYoutubeThumbnailLoad(e: Event) {
+    const img = e.currentTarget as HTMLImageElement
+    if (img.naturalWidth == 120 && img.naturalHeight == 90 && youtubeThumb) {
+      const degraded = degradeYoutubeThumbnail(youtubeThumb)
+      if (degraded) youtubeThumb = degraded
+    }
+  }
 </script>
 
 <!--
@@ -72,7 +95,43 @@
         'btn-secondary hover-scale-effect',
       ]}
     >
-      {#if post.thumbnail_url || type == 'image'}
+      {#if youtubeThumb}
+        <picture class="rounded-[inherit]">
+          {#each ['webp'] as format}
+            <source
+              srcset="{optimizeImageURL(
+                youtubeThumb,
+                128,
+                format as 'avif' | 'webp',
+              )} 1x, {optimizeImageURL(
+                youtubeThumb,
+                256,
+                format as 'avif' | 'webp',
+              )} 2x, {optimizeImageURL(
+                youtubeThumb,
+                512,
+                format as 'avif' | 'webp',
+              )} 3x"
+              media="(min-width: 0px)"
+              type="image/{format}"
+            />
+          {/each}
+          <img
+            src={blur ? '' : optimizeImageURL(youtubeThumb, -1, null)}
+            loading="lazy"
+            onload={handleYoutubeThumbnailLoad}
+            class={[
+              'object-cover relative overflow-hidden rounded-[inherit] h-full',
+              size,
+            ]}
+            alt={post.alt_text ?? ' '}
+            class:blur-xl={blur}
+          />
+        </picture>
+        <div class="post-media-indicator">
+          <Icon src={VideoCamera} micro size="16" />
+        </div>
+      {:else if post.thumbnail_url || type == 'image'}
         {@const thumbnail = post.thumbnail_url != undefined && type != 'image'}
         <picture class="rounded-[inherit]">
           <!--I would add AVIF, but lemmy.world's AVIF is broken as of currently-->

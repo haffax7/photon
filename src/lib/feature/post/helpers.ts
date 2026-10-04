@@ -97,6 +97,22 @@ export function youtubeThumbnailURL(
   return `https://img.youtube.com/vi/${id}/${quality}.jpg`
 }
 
+// Steps a youtubeThumbnailURL() result down to the next-lower quality in
+// YOUTUBE_THUMBNAIL_QUALITIES, or null if already at the lowest/unrecognized.
+// Used after detecting YouTube's 120x90 grey placeholder (see the comment
+// above YOUTUBE_THUMBNAIL_QUALITIES).
+export function degradeYoutubeThumbnail(src: string): string | null {
+  const index = YOUTUBE_THUMBNAIL_QUALITIES.findIndex((quality) =>
+    src.includes(`/${quality}.jpg`),
+  )
+  const next = YOUTUBE_THUMBNAIL_QUALITIES[index + 1]
+  if (index == -1 || !next) return null
+  return src.replace(
+    `/${YOUTUBE_THUMBNAIL_QUALITIES[index]}.jpg`,
+    `/${next}.jpg`,
+  )
+}
+
 // Self/text posts have no post.url, so Lemmy never generates a
 // thumbnail_url for them - even when their body is just a pasted YouTube
 // link. This finds that link in the body and builds the same thumbnail URL

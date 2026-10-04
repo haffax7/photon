@@ -9,26 +9,10 @@
     VideoCamera,
   } from 'svelte-hero-icons/dist'
   import {
+    degradeYoutubeThumbnail,
     type IframeType,
     optimizeImageURL,
-    YOUTUBE_THUMBNAIL_QUALITIES,
   } from '../helpers'
-
-  // maxresdefault.jpg/sddefault.jpg only exist for some videos; YouTube
-  // serves a 120x90 grey placeholder (HTTP 200, not an error) instead of
-  // failing, so onerror never fires - this detects that placeholder by its
-  // exact size and steps down to the next available quality.
-  function degradeYoutubeThumbnail(src: string): string | null {
-    const index = YOUTUBE_THUMBNAIL_QUALITIES.findIndex((quality) =>
-      src.includes(`/${quality}.jpg`),
-    )
-    const next = YOUTUBE_THUMBNAIL_QUALITIES[index + 1]
-    if (index == -1 || !next) return null
-    return src.replace(
-      `/${YOUTUBE_THUMBNAIL_QUALITIES[index]}.jpg`,
-      `/${next}.jpg`,
-    )
-  }
 
   const youtubeDomain = (place: 'youtube' | 'invidious' | 'piped') => {
     switch (place) {
