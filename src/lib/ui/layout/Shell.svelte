@@ -37,10 +37,7 @@
 
 {@render children?.()}
 <div class="min-h-screen flex flex-col">
-  <div
-    class={['shell-navbar-holder', !dockVisible && 'auto-hidden']}
-    aria-hidden="true"
-  >
+  <div class={['shell-navbar-holder', !dockVisible && 'auto-hidden']}>
     <div class="md:hidden flex justify-between" dir="ltr">
       <InvertedCorner
         class="w-8 h-8 text-slate-50 dark:text-zinc-950 rotate-270"

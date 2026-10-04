@@ -53,6 +53,7 @@
   "share_target": {
     "action": "/go",
     "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
     "params": {
       "title": "post_name",
       "text": "post_body",
