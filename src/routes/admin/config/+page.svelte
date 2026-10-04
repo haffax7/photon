@@ -75,7 +75,7 @@
   <Header pageHeader>{$t('routes.admin.config.title')}</Header>
   {#if formData}
     <TextInput
-      bind:value={() => formData.name ?? '', (v) => (formData.description = v)}
+      bind:value={() => formData.name ?? '', (v) => (formData.name = v)}
       label={$t('form.name')}
     />
     <TextInput
