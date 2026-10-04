@@ -81,6 +81,7 @@ $effect.root(() => {
       )
     }
   })
+  let colorSchemeInitialized = false
   $effect(() => {
     if (browser) {
       const prefersDark = window.matchMedia(
@@ -94,6 +95,18 @@ $effect.root(() => {
       else html?.classList.toggle('dark', theme.colorScheme === 'dark')
 
       localStorage.setItem('colorScheme', theme.colorScheme)
+
+      // Desktop Safari only honors the page's very first dynamic
+      // theme-color update after a load and silently ignores further live
+      // changes, leaving the toolbar stuck on whichever color was applied
+      // first (e.g. switching back to light never reverts the toolbar).
+      // Reloading on an explicit scheme change - same as YouTube does - lets
+      // the browser re-read theme-color fresh for the new scheme.
+      if (colorSchemeInitialized) {
+        window.location.reload()
+      } else {
+        colorSchemeInitialized = true
+      }
     }
   })
 })
