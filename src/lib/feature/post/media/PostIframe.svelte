@@ -158,23 +158,23 @@
       {#if thumbnail}
         <img
           src={optimizeImageURL(thumbnail, 512)}
-          class="absolute top-0 left-0 -z-10 w-full object-cover h-full mask-b-from-0 brightness-75"
+          class="absolute top-0 left-0 -z-10 w-full object-cover h-full"
           alt=""
         />
       {:else}
         <div class="absolute inset-0 w-full h-full scale-200 -z-10 opacity-50">
           <Blobs seed={title ?? data.text} />
         </div>
+        <Icon src={data.icon} solid size="40" />
+        <h1
+          class="font-display text-xl md:text-2xl xl:text-3xl font-medium text-left overflow-hidden overflow-ellipsis line-clamp-2"
+        >
+          {title ?? data.text}
+        </h1>
+        <div class="text-slate-600 dark:text-zinc-400">
+          {URL.parse?.(url)?.hostname ?? data.text}
+        </div>
       {/if}
-      <Icon src={data.icon} solid size="40" />
-      <h1
-        class="font-display text-xl md:text-2xl xl:text-3xl font-medium text-left overflow-hidden overflow-ellipsis line-clamp-2"
-      >
-        {title ?? data.text}
-      </h1>
-      <div class="text-slate-600 dark:text-zinc-400">
-        {URL.parse?.(url)?.hostname ?? data.text}
-      </div>
     </button>
   {/if}
 </div>
