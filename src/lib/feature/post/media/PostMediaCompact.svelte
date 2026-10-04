@@ -17,6 +17,7 @@
   import {
     bestImageURL,
     degradeYoutubeThumbnail,
+    findImageInBody,
     findYoutubeThumbnailInBody,
     isYoutubeLink,
     optimizeImageURL,
@@ -47,9 +48,15 @@
   }: Props = $props()
 
   let size = $derived(thumbnailSize(view))
-  let bodyThumbnail = $derived(
-    !post.thumbnail_url ? findYoutubeThumbnailInBody(post.body) : null,
+  let bodyImageThumbnail = $derived(
+    !post.thumbnail_url ? findImageInBody(post.body) : null,
   )
+  let bodyYoutubeThumbnail = $derived(
+    !post.thumbnail_url && !bodyImageThumbnail
+      ? findYoutubeThumbnailInBody(post.body)
+      : null,
+  )
+  let bodyThumbnail = $derived(bodyImageThumbnail ?? bodyYoutubeThumbnail)
 
   // Lemmy's own thumbnail_url for a YouTube link post is often a low-res
   // upscale; prefer fetching YouTube's own highest-quality thumbnail
@@ -175,7 +182,7 @@
         {/if}
       {:else if bodyThumbnail}
         <img
-          src={blur ? '' : bodyThumbnail}
+          src={blur ? '' : optimizeImageURL(bodyThumbnail, 256)}
           loading="lazy"
           class={[
             'object-cover relative overflow-hidden rounded-[inherit] h-full w-full',
@@ -184,9 +191,11 @@
           alt=""
           class:blur-xl={blur}
         />
-        <div class="post-media-indicator">
-          <Icon src={VideoCamera} micro size="16" />
-        </div>
+        {#if bodyYoutubeThumbnail}
+          <div class="post-media-indicator">
+            <Icon src={VideoCamera} micro size="16" />
+          </div>
+        {/if}
       {:else}
         {@const typeIconMap = new Map([
           ['embed', Link],

@@ -123,6 +123,22 @@ export function findYoutubeThumbnailInBody(body?: string): string | null {
   return match?.[1] ? youtubeThumbnailURL(match[1]) : null
 }
 
+const MARKDOWN_IMAGE_REGEX = /!\[[^\]]*\]\((\S+?)\)/
+
+// Same idea, but for an image uploaded straight into the post body (e.g.
+// via the editor's image button) - that's just a markdown image, not
+// post.thumbnail_url, so list/compact and card view otherwise show nothing.
+export function findImageInBody(body?: string): string | null {
+  if (!body) return null
+  const match = body.match(MARKDOWN_IMAGE_REGEX)
+  return match?.[1] ?? null
+}
+
+// Tries both body-embed cases a self/text post can have a visual for.
+export function findBodyThumbnail(body?: string): string | null {
+  return findImageInBody(body) ?? findYoutubeThumbnailInBody(body)
+}
+
 export function postLink(post: Post) {
   return `/post/${encodeURIComponent(profile.current.instance)}/${post.id}`
 }

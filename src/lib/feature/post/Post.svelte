@@ -11,7 +11,7 @@
     PostMediaCompact,
     PostMeta,
   } from '.'
-  import { findYoutubeThumbnailInBody, mediaType } from './helpers'
+  import { findBodyThumbnail, mediaType } from './helpers'
   import { type Tag, parseTags } from './PostMeta.svelte'
 
   function getTagRule(tags: Tag[]): 'blur-sm' | 'hide' | undefined {
@@ -72,7 +72,7 @@
   // YouTube link. Skip the thumbnail entirely rather than show an empty
   // placeholder icon.
   let hasCompactMedia = $derived(
-    type != 'none' || !!findYoutubeThumbnailInBody(post.post.body),
+    type != 'none' || !!findBodyThumbnail(post.post.body),
   )
   let rule = $derived(getTagRule(tags.tags))
   let hideTitle = $derived(
