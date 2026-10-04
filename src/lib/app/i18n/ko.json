@@ -69,7 +69,7 @@
         "location": {
             "label": "범위",
             "all": "전체",
-            "local": "로컬",
+            "local": "이 사이트",
             "subscribed": "구독",
             "moderator": "모더레이터",
             "global": "전역",
@@ -318,7 +318,7 @@
         },
         "saved": "저장됨",
         "post": {
-            "crosspostCount": "크로스포스트",
+            "crosspostCount": "복사 게시물",
             "commentCount": "댓글",
             "addComment": "댓글 작성",
             "scrollToTop": "맨 위로",
@@ -414,7 +414,7 @@
                 "listingType": {
                     "label": "목록 범위",
                     "all": "전체",
-                    "local": "로컬"
+                    "local": "이 사이트"
                 },
                 "private": "비공개 서버",
                 "hideModlogModNames": "운영 기록에서 모더레이터 이름 숨기기",
@@ -580,7 +580,7 @@
                 "share.global": "원본 서버",
                 "share.local": "내 서버",
                 "share.photon": "Photon 링크",
-                "crosspost": "크로스포스트",
+                "crosspost": "복사해서 올리기",
                 "delete": "삭제",
                 "restore": "복원"
             },
@@ -899,8 +899,8 @@
                 "description": "이미 읽은 게시물의 제목을 흐리게 표시합니다"
             },
             "crosspostMarker": {
-                "title": "크로스포스트 표시",
-                "description": "크로스포스트 시 'crossposted from' 문구와 링크를 삽입합니다."
+                "title": "복사 게시물 표시",
+                "description": "복사해서 올릴 때 'crossposted from' 문구와 링크를 삽입합니다."
             },
             "hideSubmissions": {
                 "title": "특정 게시물 숨기기",
