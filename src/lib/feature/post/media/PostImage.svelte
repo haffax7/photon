@@ -39,7 +39,7 @@
       class="post-image-blur"
     />
   </div>
-  <picture class="max-h-96">
+  <picture>
     {#each ['webp'] as format}
       <source
         srcset="{bestImageURL(
@@ -123,6 +123,9 @@
 
     .post-image {
       max-width: 100%;
+      max-height: 24rem;
+      width: 100%;
+      object-fit: cover;
       z-index: 30;
       margin-left: auto;
       margin-right: auto;
