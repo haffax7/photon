@@ -15,6 +15,7 @@
             "label": "글 쓰기",
             "post": "게시물",
             "community": "커뮤니티",
+            "createCommunity": "커뮤니티 만들기",
             "logingate": "콘텐츠를 작성하려면 로그인해야 합니다."
         },
         "menu": {

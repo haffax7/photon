@@ -13,6 +13,7 @@
     PencilSquare,
     ServerStack,
     ShieldCheck,
+    UserGroup,
   } from 'svelte-hero-icons/dist'
   import type { ClassValue } from 'svelte/elements'
   import Avatar from '../generic/Avatar.svelte'
@@ -102,24 +103,31 @@
     {/if}
   </div>
   <NavButton
+    label={$t('nav.create.label')}
+    href="/create/post"
+    isSelectedFilter={(path) => path.startsWith('/create/post')}
+    icon={PencilSquare}
+    class="order-1 nav-btn-sm-primary"
+  />
+  <NavButton
+    label={$t('nav.create.createCommunity')}
+    href="/create/community"
+    isSelectedFilter={(path) => path.startsWith('/create/community')}
+    icon={UserGroup}
+    class="order-2"
+  />
+  <NavButton
     href="/explore/communities"
     label={$t('routes.explore.title')}
     icon={GlobeAlt}
     isSelectedFilter={(path) => path.startsWith('/explore')}
-    class="order-1"
+    class="order-3"
   />
   <NavButton
     href="/search"
     label={$t('nav.search')}
     icon={MagnifyingGlass}
-    class="order-3 md:order-2"
-  />
-  <NavButton
-    label={$t('nav.create.label')}
-    href="/create"
-    isSelectedFilter={(path) => path.startsWith('/create')}
-    icon={PencilSquare}
-    class="order-2 md:order-3 nav-btn-sm-primary"
+    class="order-4"
   />
   <Menu placement="bottom">
     {#snippet target(attachment)}
@@ -128,7 +136,7 @@
         class={[
           'w-10 h-10 rounded-full',
           'transition-all relative grid place-items-center',
-          ' group cursor-pointer order-4',
+          ' group cursor-pointer order-5',
         ]}
         title={$t('profile.profile')}
       >
