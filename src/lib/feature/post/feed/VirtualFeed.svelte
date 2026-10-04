@@ -10,7 +10,7 @@
   import Placeholder from '$lib/ui/info/Placeholder.svelte'
   import EndPlaceholder from '$lib/ui/layout/EndPlaceholder.svelte'
   import { Button, Material, Spinner } from 'mono-svelte'
-  import { onDestroy, untrack } from 'svelte'
+  import { onDestroy, onMount, tick, untrack } from 'svelte'
   import {
     ArchiveBox,
     ArrowsPointingOut,
@@ -106,6 +106,25 @@
       loading = false
     }
   }
+
+  // svelte-infinite-scroll only checks on scroll/resize events, so if the
+  // initial content is too short to make the page scrollable, "loadMore"
+  // never fires and the loading spinner spins forever. Fill the viewport
+  // manually on mount so a scroll is never required to trigger the first load.
+  async function fillViewport() {
+    while (
+      hasMore &&
+      !loading &&
+      document.documentElement.scrollHeight <= window.innerHeight
+    ) {
+      await loadMore()
+      await tick()
+    }
+  }
+
+  onMount(() => {
+    if (settings.infiniteScroll) fillViewport()
+  })
 
   const observer = browser
     ? new IntersectionObserver(
