@@ -86,38 +86,6 @@
       icon={UserGroup}
     />
   {/if}
-  <EndPlaceholder margin="sm" size="xs">{$t('nav.menu.app')}</EndPlaceholder>
-  <SidebarButton
-    href="/settings"
-    label={$t('nav.menu.settings')}
-    icon={Cog6Tooth}
-  />
-  <Select bind:value={theme.colorScheme} size="sm">
-    {#snippet target(attachment)}
-      <SidebarButton
-        {@attach attachment}
-        label={$t('nav.menu.colorscheme.label')}
-        icon={theme.colorScheme == 'system'
-          ? ComputerDesktop
-          : theme.colorScheme == 'light'
-            ? Sun
-            : Moon}
-        class="w-full relative"
-      >
-        <Option value="system" class="hidden" icon={ComputerDesktop}>
-          {$t('nav.menu.colorscheme.system')}
-        </Option>
-        <Option value="light" class="hidden" icon={Sun}>
-          {$t('nav.menu.colorscheme.light')}
-        </Option>
-        <Option value="dark" class="hidden" icon={Moon}>
-          {$t('nav.menu.colorscheme.dark')}
-        </Option>
-        <Icon micro size="16" src={ChevronUpDown} class="ml-auto" />
-      </SidebarButton>
-    {/snippet}
-  </Select>
-  <SidebarButton href="/theme" label={$t('nav.menu.theme')} icon={Swatch} />
   {#if profile.current?.user}
     <EndPlaceholder margin="sm" size="xs">
       {$t('content.communities')}
@@ -176,6 +144,39 @@
       </Expandable>
     </div>
   {/if}
+
+  <EndPlaceholder margin="sm" size="xs">{$t('nav.menu.app')}</EndPlaceholder>
+  <SidebarButton
+    href="/settings"
+    label={$t('nav.menu.settings')}
+    icon={Cog6Tooth}
+  />
+  <Select bind:value={theme.colorScheme} size="sm">
+    {#snippet target(attachment)}
+      <SidebarButton
+        {@attach attachment}
+        label={$t('nav.menu.colorscheme.label')}
+        icon={theme.colorScheme == 'system'
+          ? ComputerDesktop
+          : theme.colorScheme == 'light'
+            ? Sun
+            : Moon}
+        class="w-full relative"
+      >
+        <Option value="system" class="hidden" icon={ComputerDesktop}>
+          {$t('nav.menu.colorscheme.system')}
+        </Option>
+        <Option value="light" class="hidden" icon={Sun}>
+          {$t('nav.menu.colorscheme.light')}
+        </Option>
+        <Option value="dark" class="hidden" icon={Moon}>
+          {$t('nav.menu.colorscheme.dark')}
+        </Option>
+        <Icon micro size="16" src={ChevronUpDown} class="ml-auto" />
+      </SidebarButton>
+    {/snippet}
+  </Select>
+  <SidebarButton href="/theme" label={$t('nav.menu.theme')} icon={Swatch} />
 
   <div class="flex-1 h-full mt-auto"></div>
 
