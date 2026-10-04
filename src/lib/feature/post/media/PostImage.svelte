@@ -9,9 +9,14 @@
   interface Props {
     post: Post
     blur?: boolean
+    // Feed cards crop tall images to a fixed height (Reddit-style); the
+    // single post detail page should show the whole image uncropped
+    // instead, since cover-cropping there hides real content for
+    // tall/stitched screenshots.
+    fullSize?: boolean
   }
 
-  let { post, blur = false }: Props = $props()
+  let { post, blur = false, fullSize = false }: Props = $props()
 
   let imageLoaded: boolean | null = $state(null)
   onMount(() => {
@@ -23,7 +28,10 @@
 <svelte:element
   this={settings.expandImages ? 'button' : 'a'}
   href={postLink(post)}
-  class={['container/a group post-image-container']}
+  class={[
+    'container/a group post-image-container',
+    fullSize && 'full-size',
+  ]}
   data-sveltekit-preload-data="off"
   aria-label={post.name}
   onclick={() => showImage(bestImageURL(post, false, -1, null))}
@@ -130,6 +138,11 @@
       margin-left: auto;
       margin-right: auto;
       transition: filter 400ms cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
+
+    &.full-size .post-image {
+      max-height: 80vh;
+      object-fit: contain;
     }
 
     &:hover {

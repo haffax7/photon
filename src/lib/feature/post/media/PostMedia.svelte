@@ -17,6 +17,7 @@
     type?: MediaType
     opened?: boolean | undefined
     blur?: boolean
+    fullSize?: boolean
     [key: string]: any
   }
 
@@ -26,6 +27,7 @@
     type = 'none',
     opened = undefined,
     blur = post.nsfw && settings.nsfwBlur,
+    fullSize = false,
     ...rest
   }: Props = $props()
 </script>
@@ -37,7 +39,7 @@
   - Embed link/card.
 -->
 {#if type == 'image' && view == 'cozy'}
-  <PostImage {post} {blur} {...rest} />
+  <PostImage {post} {blur} {fullSize} {...rest} />
 {:else if (type == 'iframe' || type == 'video') && view == 'cozy' && post.url}
   {@const youtubeId = isYoutubeLink(post.url)?.[1]}
   <PostIframe
