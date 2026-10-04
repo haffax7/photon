@@ -1,6 +1,8 @@
 <script lang="ts">
   import { isYoutubeLink } from '$lib/feature/post/helpers'
-  import PostIframe from '$lib/feature/post/media/PostIframe.svelte'
+  import PostIframe, {
+    youtubeVideoID,
+  } from '$lib/feature/post/media/PostIframe.svelte'
   import { photonify } from './plugins'
 
   interface Props {
@@ -21,11 +23,19 @@
 
   let photonified = $derived(photonify(href))
   let youtube = $derived(isYoutubeLink(href))
+  let youtubeId = $derived(youtube ? youtubeVideoID(href) : null)
 </script>
 
 {#if youtube}
   <span class="block w-full max-w-lg not-prose my-2 aspect-video">
-    <PostIframe type="youtube" url={href} {title} />
+    <PostIframe
+      type="youtube"
+      url={href}
+      {title}
+      thumbnail={youtubeId
+        ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
+        : undefined}
+    />
   </span>
 {:else}
   <a

@@ -27,7 +27,7 @@
     }
   }
 
-  function youtubeVideoID(url: string): string | null {
+  export function youtubeVideoID(url: string): string | null {
     const regex =
       /^(?:https?:\/\/)?(?:www\.|m\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|shorts\/|live\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/
     const match = url.match(regex)
