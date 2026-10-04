@@ -58,6 +58,11 @@ const config: Config = {
       loader: async () => (await import('./ja.json')).default,
     },
     {
+      locale: 'ko',
+      key: '',
+      loader: async () => (await import('./ko.json')).default,
+    },
+    {
       locale: 'nl',
       key: '',
       loader: async () => (await import('./nl.json')).default,

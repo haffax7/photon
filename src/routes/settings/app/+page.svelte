@@ -57,6 +57,7 @@
     ['fr', { name: 'Français' }],
     ['hu', { name: 'Magyar' }],
     ['ja', { name: '日本語' }],
+    ['ko', { name: '한국어' }],
     ['nl', { name: 'Nederlands' }],
     ['pl', { name: 'Polski' }],
     ['pt', { name: 'Português (PT)' }],
