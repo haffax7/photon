@@ -185,6 +185,7 @@
   .iframe-container {
     border-radius: var(--radius-2xl);
     aspect-ratio: 16 / 9;
+    max-height: 30rem;
     position: relative;
     width: 100%;
     height: 100%;
