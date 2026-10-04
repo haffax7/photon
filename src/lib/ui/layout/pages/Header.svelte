@@ -1,5 +1,7 @@
 <script lang="ts">
   import { t } from '$lib/app/i18n'
+  import { onDestroy } from 'svelte'
+  import { pageTitleState } from './pageTitle.svelte'
 
   const sizes = {
     sm: 'text-2xl',
@@ -25,6 +27,18 @@
     children,
     extended,
   }: Props = $props()
+
+  // The navbar shows this page's title next to the logo instead, so hand
+  // the title snippet up there rather than rendering a large heading here.
+  $effect(() => {
+    if (pageHeader && children) pageTitleState.title = children
+  })
+
+  onDestroy(() => {
+    if (pageHeader && pageTitleState.title === children) {
+      pageTitleState.title = undefined
+    }
+  })
 </script>
 
 <header
@@ -40,7 +54,7 @@
   {#if children}
     <h1
       class={[
-        sizes[size],
+        pageHeader ? 'sr-only' : sizes[size],
         'flex gap-2 w-full tracking-tight font-medium',
         clazz,
       ]}

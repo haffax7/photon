@@ -17,6 +17,7 @@
   import type { ClassValue } from 'svelte/elements'
   import Avatar from '../generic/Avatar.svelte'
   import Logo from '../generic/Logo.svelte'
+  import { pageTitleState } from '../layout/pages/pageTitle.svelte'
   import CommandsWrapper, { chords } from './commands/CommandsHost.svelte'
   import NavButton from './NavButton.svelte'
 
@@ -30,45 +31,56 @@
 
 <CommandsWrapper />
 <nav class={['navbar @container', clazz]} {style} data-sveltekit-preload-data>
-  <NavButton
-    oncontextmenu={(e: Event) => {
-      e.preventDefault()
-      chords.commands = true
-      return true
-    }}
-    icon={Home}
-    href="/"
-    label={$t('nav.home')}
-    class={[
-      'logo border-0 md:w-10! md:h-10 md:px-0! -order-1',
-      !LINKED_INSTANCE_URL ? 'md:rounded-full!' : 'rounded-none!',
-    ]}
-    adaptive={false}
-  >
-    {#snippet customIcon()}
-      {#if LINKED_INSTANCE_URL}
-        {#if site.data}
-          <Avatar
-            alt={site.data.site_view.site.name}
-            url={site.data.site_view.site.icon}
-            width={32}
-            circle={false}
-          />
+  <div class="flex items-center gap-2 min-w-0 -order-1">
+    <NavButton
+      oncontextmenu={(e: Event) => {
+        e.preventDefault()
+        chords.commands = true
+        return true
+      }}
+      icon={Home}
+      href="/"
+      label={$t('nav.home')}
+      class={[
+        'logo border-0 md:w-10! md:h-10 md:px-0!',
+        !LINKED_INSTANCE_URL ? 'md:rounded-full!' : 'rounded-none!',
+      ]}
+      adaptive={false}
+    >
+      {#snippet customIcon()}
+        {#if LINKED_INSTANCE_URL}
+          {#if site.data}
+            <Avatar
+              alt={site.data.site_view.site.name}
+              url={site.data.site_view.site.icon}
+              width={32}
+              circle={false}
+            />
+          {:else}
+            <Spinner width={32} />
+          {/if}
         {:else}
-          <Spinner width={32} />
-        {/if}
-      {:else}
-        <div class="hidden md:block text-primary-900! dark:text-primary-100!">
-          <Logo width={32} />
-        </div>
-        <div class={['block md:hidden text-inherit!']}>
-          <div class="prefix">
-            <Icon src={Home} size="20" mini />
+          <div
+            class="hidden md:block text-primary-900! dark:text-primary-100!"
+          >
+            <Logo width={32} />
           </div>
-        </div>
-      {/if}
-    {/snippet}
-  </NavButton>
+          <div class={['block md:hidden text-inherit!']}>
+            <div class="prefix">
+              <Icon src={Home} size="20" mini />
+            </div>
+          </div>
+        {/if}
+      {/snippet}
+    </NavButton>
+    {#if pageTitleState.title}
+      <span
+        class="hidden sm:block truncate font-medium text-sm text-slate-800 dark:text-zinc-200 min-w-0"
+      >
+        {@render pageTitleState.title()}
+      </span>
+    {/if}
+  </div>
   <div class="hidden md:block md:flex-1"></div>
   <div class="sr-only md:not-sr-only md:contents">
     {#if profile.isAdmin}

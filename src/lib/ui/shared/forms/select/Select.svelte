@@ -86,7 +86,10 @@
   <Label
     text={label}
     customText={customLabel}
-    class={['space-y-1 relative max-w-full w-max min-w-0', baseClass]}
+    class={[
+      'flex flex-row items-center gap-1.5 relative max-w-full w-max min-w-0',
+      baseClass,
+    ]}
   >
     <div class="relative max-w-full" role="presentation">
       <select
