@@ -13,10 +13,24 @@ self.addEventListener('install', (event) => {
 
   async function addFilesToCache() {
     const cache = await caches.open(CACHE)
-    await cache.addAll(ASSETS)
+    // Precache assets individually instead of cache.addAll(), since addAll()
+    // rejects (and aborts the entire install) if even one asset fails to
+    // fetch. A single flaky request shouldn't leave the whole app stuck on
+    // an old, possibly broken, service worker version.
+    await Promise.all(
+      ASSETS.map((asset) =>
+        cache.add(asset).catch((err) => {
+          console.warn(`[sw] failed to precache ${asset}`, err)
+        }),
+      ),
+    )
   }
 
   event.waitUntil(addFilesToCache())
+  // Activate this version immediately instead of waiting for all open tabs
+  // of the old version to close, which otherwise lets a stale service
+  // worker keep serving old, hash-mismatched JS chunks indefinitely.
+  self.skipWaiting()
 })
 
 self.addEventListener('activate', (event) => {
@@ -26,6 +40,7 @@ self.addEventListener('activate', (event) => {
     for (const key of await caches.keys()) {
       if (key !== CACHE) await caches.delete(key)
     }
+    await self.clients.claim()
   }
 
   event.waitUntil(deleteOldCaches())
