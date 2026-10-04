@@ -1,9 +1,9 @@
 <script lang="ts" module>
   export const voteColor = (vote: number) =>
     vote == 1
-      ? `bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300`
+      ? `bg-primary-100 dark:bg-primary-400/20 text-primary-700 dark:text-primary-300`
       : vote == -1
-        ? `bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400`
+        ? `bg-red-100 dark:bg-red-400/20 text-red-600 dark:text-red-400`
         : ''
 
   export const shouldShowVoteColor = (
