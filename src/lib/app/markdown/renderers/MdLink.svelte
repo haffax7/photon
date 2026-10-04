@@ -32,7 +32,7 @@
 </script>
 
 {#if youtube}
-  <span class="block w-full max-w-lg not-prose my-2 aspect-video">
+  <span class="block w-full not-prose my-2 aspect-video">
     <PostIframe
       type="youtube"
       url={href}
