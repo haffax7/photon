@@ -11,7 +11,7 @@
     PostMediaCompact,
     PostMeta,
   } from '.'
-  import { mediaType } from './helpers'
+  import { findYoutubeThumbnailInBody, mediaType } from './helpers'
   import { type Tag, parseTags } from './PostMeta.svelte'
 
   function getTagRule(tags: Tag[]): 'blur-sm' | 'hide' | undefined {
@@ -67,6 +67,13 @@
     }
   })
   let type = $derived(mediaType(post.post))
+  // A plain text post with no media type has nothing to show in the
+  // compact thumbnail slot - unless its body happens to contain a bare
+  // YouTube link. Skip the thumbnail entirely rather than show an empty
+  // placeholder icon.
+  let hasCompactMedia = $derived(
+    type != 'none' || !!findYoutubeThumbnailInBody(post.post.body),
+  )
   let rule = $derived(getTagRule(tags.tags))
   let hideTitle = $derived(
     settings.posts.deduplicateEmbed &&
@@ -135,7 +142,7 @@
         />
       {/if}
     </div>
-    {#if view == 'compact'}
+    {#if view == 'compact' && hasCompactMedia}
       <PostMediaCompact
         post={post.post}
         {type}
