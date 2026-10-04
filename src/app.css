@@ -15,6 +15,9 @@
 
   --ease-cubic: cubic-bezier(0.075, 0.82, 0.165, 1);
 
+  --text-sm: 0.9375rem;
+  --text-sm--line-height: calc(1.25 / 0.9375);
+
   --color-slate-25: rgb(252 253 254);
   --color-zinc-925: 28 28 32;
 
