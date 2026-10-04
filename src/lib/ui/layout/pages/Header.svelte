@@ -6,7 +6,7 @@
   const sizes = {
     sm: 'text-2xl',
     md: 'text-3xl',
-    lg: 'text-4xl',
+    lg: 'text-2xl',
     xl: 'text-6xl',
   }
 
