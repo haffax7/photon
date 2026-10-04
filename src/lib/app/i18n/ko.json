@@ -12,7 +12,7 @@
         "communities": "커뮤니티",
         "search": "검색",
         "create": {
-            "label": "만들기",
+            "label": "글 쓰기",
             "post": "게시물",
             "community": "커뮤니티",
             "logingate": "콘텐츠를 작성하려면 로그인해야 합니다."
