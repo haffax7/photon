@@ -122,13 +122,22 @@
 </script>
 
 {#if uploadingImage && images}
-  <Modal title={$t('form.post.uploadImage')} bind:open={uploadingImage}>
+  <Modal
+    title={$t('form.post.uploadImage')}
+    bind:open={uploadingImage}
+    ondismissed={() => (image = null)}
+  >
     <ImageAttachForm
       bind:image
       onupload={(e) => {
         e.forEach((i) => {
           wrapSelection(`![](${i})\n\n`, '')
         })
+        // Without this, the modal stayed open after a successful upload
+        // with the same file still selected - looking like it had failed,
+        // which led people to hit Upload again and re-upload duplicates.
+        image = null
+        uploadingImage = false
       }}
     />
   </Modal>
