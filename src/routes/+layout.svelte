@@ -117,14 +117,16 @@
 </script>
 
 <svelte:head>
-  <meta
-    name="theme-color"
-    content={rgbToHex(
-      theme.colorScheme && inDarkColorScheme()
-        ? (theme.current.colors.zinc?.[925] ?? getDefaultColors().zinc[925])
-        : (theme.current.colors.slate?.[25] ?? getDefaultColors().slate[25]),
-    )}
-  />
+  {#key `${theme.colorScheme}-${inDarkColorScheme()}`}
+    <meta
+      name="theme-color"
+      content={rgbToHex(
+        theme.colorScheme && inDarkColorScheme()
+          ? (theme.current.colors.zinc?.[925] ?? getDefaultColors().zinc[925])
+          : (theme.current.colors.slate?.[25] ?? getDefaultColors().slate[25]),
+      )}
+    />
+  {/key}
   {#if site.data?.site_view}
     {#if LINKED_INSTANCE_URL}
       <link rel="icon" href={site.data?.site_view?.site.icon} />
