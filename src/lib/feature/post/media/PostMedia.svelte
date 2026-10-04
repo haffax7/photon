@@ -50,6 +50,7 @@
     url={post.url}
     {opened}
     title={post.name}
+    {fullSize}
     {...rest}
   />
 {:else if type == 'poll' && post.poll && view == 'cozy'}
