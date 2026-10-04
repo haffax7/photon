@@ -1,9 +1,13 @@
 <script lang="ts" module>
+  // Text/icon color only - the pill's background stays the same neutral
+  // tone whether or not it's active, so the active side never looks
+  // brighter than the inactive one (that mismatch was especially visible
+  // in dark mode).
   export const voteColor = (vote: number) =>
     vote == 1
-      ? `bg-primary-100 dark:bg-primary-400/20 text-primary-700 dark:text-primary-300`
+      ? `text-primary-600 dark:text-primary-400`
       : vote == -1
-        ? `bg-red-100 dark:bg-red-400/20 text-red-600 dark:text-red-400`
+        ? `text-red-600 dark:text-red-400`
         : ''
 
   export const shouldShowVoteColor = (
@@ -95,12 +99,9 @@
     class={[
       'flex items-center gap-0.5 transition-colors relative cursor-pointer h-full p-2 first:border-r-0! first:rounded-l-[inherit] last:rounded-r-[inherit]',
       'last:flex-row-reverse',
-      vote == targetNum
-        ? shouldShowVoteColor(
-            vote,
-            target == 'upvote' ? 'upvotes' : 'downvotes',
-          )
-        : 'bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700',
+      'bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700',
+      vote == targetNum &&
+        shouldShowVoteColor(vote, target == 'upvote' ? 'upvotes' : 'downvotes'),
     ]}
     aria-pressed={vote == targetNum}
     aria-label={$t(
