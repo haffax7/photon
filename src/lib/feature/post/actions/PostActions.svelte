@@ -82,7 +82,7 @@
 </script>
 
 {#if editing}
-  <Modal bind:open={editing}>
+  <Modal bind:open={editing} class="max-w-3xl!">
     {#snippet customTitle()}
       <h1 class="text-2xl font-bold">{$t('form.edit')}</h1>
     {/snippet}
