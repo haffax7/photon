@@ -8,7 +8,7 @@
     "nav": {
         "home": "홈",
         "admin": "관리",
-        "moderation": "모더레이션",
+        "moderation": "운영",
         "communities": "커뮤니티",
         "search": "검색",
         "create": {
@@ -239,7 +239,7 @@
             }
         },
         "modlog": {
-            "title": "모더레이션 로그",
+            "title": "운영 기록",
             "filters": "필터"
         },
         "instances": "연결된 서버",
@@ -371,7 +371,7 @@
             }
         },
         "moderation": {
-            "title": "모더레이션",
+            "title": "운영",
             "empty": {
                 "title": "새 신고 없음",
                 "description": "콘텐츠가 신고되면 여기서 처리할 수 있습니다."
@@ -386,7 +386,7 @@
             "feed": "신고",
             "manage": {
                 "title": "관리",
-                "modlogs": "최근 모더레이션 로그",
+                "modlogs": "최근 운영 기록",
                 "ban": "차단",
                 "unban": "차단 해제"
             }
@@ -417,7 +417,7 @@
                     "local": "로컬"
                 },
                 "private": "비공개 서버",
-                "hideModlogModNames": "모더레이션 로그에서 모더레이터 이름 숨기기",
+                "hideModlogModNames": "운영 기록에서 모더레이터 이름 숨기기",
                 "slurFilter": "비속어 필터 정규식",
                 "federation": "연합 사용",
                 "federationDebug": "연합 디버그 모드",
@@ -534,7 +534,7 @@
             "moderators": "모더레이터",
             "subscribe": "구독",
             "subscribed": "구독 중",
-            "modlog": "모더레이션 로그",
+            "modlog": "운영 기록",
             "block": "차단",
             "unblock": "차단 해제",
             "blockInstance": "서버 차단",
@@ -669,15 +669,15 @@
         "unlock": "잠금 해제",
         "remove": "제거",
         "restore": "복원",
-        "label": "모더레이션",
-        "labelInstanceOnly": "모더레이션 (로컬 전용)",
+        "label": "운영",
+        "labelInstanceOnly": "운영 (로컬 전용)",
         "feature": "고정",
         "unfeature": "고정 해제",
         "votes": "투표",
         "modlog": {
-            "user": "사용자 모더레이션 로그",
-            "post": "게시물 모더레이션 로그",
-            "comment": "댓글 모더레이션 로그"
+            "user": "사용자 운영 기록",
+            "post": "게시물 운영 기록",
+            "comment": "댓글 운영 기록"
         }
     },
     "common": {
@@ -926,7 +926,7 @@
             }
         },
         "moderation": {
-            "title": "모더레이션",
+            "title": "운영",
             "replyPresets": {
                 "title": "제거 사유 프리셋",
                 "description": "게시물 제거 창의 '답글 사유'에 사용할 프리셋입니다.",
