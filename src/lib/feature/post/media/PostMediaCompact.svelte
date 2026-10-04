@@ -14,7 +14,12 @@
     PresentationChartBar,
     VideoCamera,
   } from 'svelte-hero-icons/dist'
-  import { bestImageURL, postLink, type MediaType } from '../helpers'
+  import {
+    bestImageURL,
+    findYoutubeThumbnailInBody,
+    postLink,
+    type MediaType,
+  } from '../helpers'
 
   const thumbnailSize = (view: View) =>
     view == 'compact' ? 'w-22 h-22 sm:w-28' : 'w-24 h-24 sm:w-32'
@@ -38,6 +43,9 @@
   }: Props = $props()
 
   let size = $derived(thumbnailSize(view))
+  let bodyThumbnail = $derived(
+    !post.thumbnail_url ? findYoutubeThumbnailInBody(post.body) : null,
+  )
 </script>
 
 <!--
@@ -106,6 +114,20 @@
             <Icon src={type == 'iframe' ? VideoCamera : Link} micro size="16" />
           </div>
         {/if}
+      {:else if bodyThumbnail}
+        <img
+          src={blur ? '' : bodyThumbnail}
+          loading="lazy"
+          class={[
+            'object-cover relative overflow-hidden rounded-[inherit] h-full w-full',
+            size,
+          ]}
+          alt=""
+          class:blur-xl={blur}
+        />
+        <div class="post-media-indicator">
+          <Icon src={VideoCamera} micro size="16" />
+        </div>
       {:else}
         {@const typeIconMap = new Map([
           ['embed', Link],

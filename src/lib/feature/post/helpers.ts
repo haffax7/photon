@@ -73,6 +73,22 @@ export const isYoutubeLink = (url?: string): RegExpMatchArray | null => {
   return url?.match?.(YOUTUBE_REGEX)
 }
 
+// Same as YOUTUBE_REGEX but without the ^...$ anchors, so it can find a
+// YouTube link anywhere inside a larger block of text (e.g. a post body),
+// not just validate that an entire string is one.
+const YOUTUBE_SEARCH_REGEX =
+  /(?:https?:\/\/)?(?:www\.|m\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|shorts\/|live\/|v\/|watch\?v=|watch\?[^\s]*&v=))([\w-]{11})/
+
+// Self/text posts have no post.url, so Lemmy never generates a
+// thumbnail_url for them - even when their body is just a pasted YouTube
+// link. This finds that link in the body and builds the same thumbnail URL
+// YouTube serves for any video, so list/compact view can still show one.
+export function findYoutubeThumbnailInBody(body?: string): string | null {
+  if (!body) return null
+  const match = body.match(YOUTUBE_SEARCH_REGEX)
+  return match?.[1] ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : null
+}
+
 export function postLink(post: Post) {
   return `/post/${encodeURIComponent(profile.current.instance)}/${post.id}`
 }

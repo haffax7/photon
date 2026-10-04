@@ -3,6 +3,7 @@
   import PostIframe, {
     youtubeVideoID,
   } from '$lib/feature/post/media/PostIframe.svelte'
+  import { getContext } from 'svelte'
   import { photonify } from './plugins'
 
   interface Props {
@@ -13,6 +14,8 @@
 
   let { href = '', title = undefined, children }: Props = $props()
 
+  const options = getContext<{ playableEmbeds?: boolean }>('options')
+
   export const parseURL = (href: string) => {
     try {
       return new URL(href)
@@ -22,7 +25,9 @@
   }
 
   let photonified = $derived(photonify(href))
-  let youtube = $derived(isYoutubeLink(href))
+  let youtube = $derived(
+    options?.playableEmbeds !== false && isYoutubeLink(href),
+  )
   let youtubeId = $derived(youtube ? youtubeVideoID(href) : null)
 </script>
 

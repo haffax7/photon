@@ -120,6 +120,10 @@
 <script lang="ts">
   interface RendererOptions {
     autoloadImages: boolean
+    // Whether a bare video link (e.g. a pasted YouTube URL) should render as
+    // a playable embed. Off by default in truncated previews, since a
+    // full-height embed inside a height-clamped preview just gets cropped.
+    playableEmbeds?: boolean
   }
 
   interface Props {
@@ -139,10 +143,12 @@
     class: clazz = '',
     rendererOptions = {
       autoloadImages: true,
+      playableEmbeds: true,
     },
   }: Props = $props()
 
   setContext('options', {
+    playableEmbeds: true,
     ...rendererOptions,
     inline: inline,
     noStyle: noStyle,

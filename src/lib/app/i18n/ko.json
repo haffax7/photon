@@ -107,7 +107,7 @@
             "label": "보기",
             "cozy": "카드형",
             "list": "목록형",
-            "compact": "간단히",
+            "compact": "목록형",
             "legacy": "레거시"
         },
         "type": "유형",

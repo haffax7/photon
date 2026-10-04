@@ -53,7 +53,12 @@
   ]}
   bind:this={element}
 >
-  <Markdown source={expanded ? body : body.slice(0, 1000)} />
+  {#key expanded}
+    <Markdown
+      source={expanded ? body : body.slice(0, 1000)}
+      rendererOptions={{ autoloadImages: true, playableEmbeds: expanded }}
+    />
+  {/key}
   {#if overflows}
     <Button
       onclick={() => (expanded = !expanded)}
