@@ -18,6 +18,9 @@
   --text-sm: 0.9375rem;
   --text-sm--line-height: calc(1.25 / 0.9375);
 
+  --text-base: 1.1rem;
+  --text-base--line-height: calc(1.5 / 1.1);
+
   --color-slate-25: rgb(252 253 254);
   --color-zinc-925: 28 28 32;
 

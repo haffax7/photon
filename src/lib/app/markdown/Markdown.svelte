@@ -4,6 +4,7 @@
   import type { ClassValue } from 'svelte/elements'
   import MdTree from './MdTree.svelte'
   import MdCode from './renderers/MdCode.svelte'
+  import MdBr from './renderers/MdBr.svelte'
   import MdHeading from './renderers/MdHeading.svelte'
   import MdHr from './renderers/MdHr.svelte'
   import MdHtml from './renderers/MdHtml.svelte'
@@ -78,6 +79,7 @@
   })
 
   export const renderers = {
+    br: MdBr,
     heading: MdHeading,
     image: MdImage,
     link: MdLink,
@@ -107,6 +109,7 @@
   }
 
   export const inlineRenderers = {
+    br: MdBr,
     paragraph: MdParagraph,
     subscript: MdSubscript,
     superscript: MdSuperscript,
