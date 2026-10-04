@@ -2,7 +2,7 @@ import { browser } from '$app/environment'
 import { env } from '$env/dynamic/public'
 import type { CommentSortType, ListingType, SortType } from '$lib/api/types'
 import type { Filter } from '$lib/feature/post/filters.svelte'
-import { locale } from './i18n'
+import { aliases, locale } from './i18n'
 
 export type View = 'cozy' | 'compact'
 export const SSR_ENABLED = env.PUBLIC_SSR_ENABLED?.toLowerCase() == 'true'
@@ -171,7 +171,10 @@ $effect.root(() => {
     if (settings.language) {
       locale.set(settings.language)
     } else {
-      if (browser) locale.set(navigator?.language)
+      if (browser) {
+        const detected = navigator?.language
+        locale.set(aliases.get(detected) ?? detected)
+      }
     }
   })
 
