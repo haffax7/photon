@@ -61,6 +61,12 @@
 
         if (autoplay) embedUrl.searchParams.set('autoplay', '1')
 
+        // Without this, YouTube's player can reject the embed with
+        // "Error 153" (playback on other websites disabled) because it
+        // can't verify the embedding origin - especially behind a strict
+        // Referrer-Policy that strips the referrer on cross-origin iframes.
+        embedUrl.searchParams.set('origin', window.location.origin)
+
         return embedUrl.toString()
       }
     }
