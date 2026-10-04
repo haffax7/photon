@@ -23,7 +23,12 @@
   import FormattedNumber from '$lib/ui/util/FormattedNumber.svelte'
   import { Button, Expandable, toast } from 'mono-svelte'
   import { onMount } from 'svelte'
-  import { ChatBubbleLeftRight, ChevronDoubleUp } from 'svelte-hero-icons/dist'
+  import {
+    ArrowLeft,
+    ChatBubbleLeftRight,
+    ChevronDoubleUp,
+    Icon,
+  } from 'svelte-hero-icons/dist'
   import CommentProvider from './CommentProvider.svelte'
 
   let { data } = $props()
@@ -126,6 +131,16 @@
 <article class="flex flex-col gap-2">
   <header class="flex flex-col gap-2">
     <div class="flex flex-row items-center gap-2 flex-wrap">
+      <Button
+        onclick={() => history.back()}
+        size="custom"
+        color="none"
+        rounding="pill"
+        class="w-8 h-8 shrink-0 grid place-items-center bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700"
+        aria-label={$t('common.back')}
+      >
+        <Icon src={ArrowLeft} size="16" mini />
+      </Button>
       <PostMeta
         community={data.data.value.post.community}
         user={data.data.value.post.creator}
