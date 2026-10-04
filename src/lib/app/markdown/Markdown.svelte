@@ -37,7 +37,11 @@
 
   marked.setOptions({
     gfm: true,
-    breaks: false,
+    // A single newline (no blank line) between lines was being collapsed
+    // into one run-on paragraph, silently discarding line breaks the
+    // author typed intentionally - matches what the raw editor textarea
+    // shows, which is what people expect from "what you typed".
+    breaks: true,
   })
 
   marked.use(linkify, {
