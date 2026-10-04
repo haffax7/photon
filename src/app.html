@@ -2,6 +2,46 @@
 <html class="dark font-sans" lang="en" style="/*THEME_VARS*/">
   <head>
     <meta charset="utf-8" />
+    <script nonce="%sveltekit.nonce%">
+      // A deploy swaps out the previous build's hashed chunk files
+      // immediately, so a page load that started just before/during a
+      // deploy can fail to fetch its own entry module ("Failed to fetch
+      // dynamically imported module" / "Importing a module script failed").
+      // This happens before SvelteKit's own router boots (it's the
+      // framework's own bootstrap import in the body), so it can't be
+      // caught via hooks.client.ts — catch it here instead and reload once.
+      ;(function () {
+        function isChunkLoadError(message) {
+          return /fetch dynamically imported module|importing a module script failed|error loading dynamically imported module/i.test(
+            message || '',
+          )
+        }
+        function maybeReload(message) {
+          if (!isChunkLoadError(message)) return
+          try {
+            var key = 'photon:chunk-reload-at'
+            var last = Number(sessionStorage.getItem(key) || '0')
+            var now = Date.now()
+            if (now - last > 10000) {
+              sessionStorage.setItem(key, String(now))
+              location.reload()
+            }
+          } catch {
+            location.reload()
+          }
+        }
+        window.addEventListener('unhandledrejection', function (event) {
+          maybeReload(event.reason && event.reason.message)
+        })
+        window.addEventListener(
+          'error',
+          function (event) {
+            maybeReload(event.message)
+          },
+          true,
+        )
+      })()
+    </script>
     <link rel="icon" href="%sveltekit.assets%/img/logo-background.svg" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1" />
